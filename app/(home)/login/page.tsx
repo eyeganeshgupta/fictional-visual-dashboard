@@ -9,10 +9,41 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { PersonStandingIcon } from "lucide-react";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
 export default function LoginPage() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleSubmit = () => {
+    // NOTE: handle submit function will only run when the validation is passed
+    console.log("Validation passed");
+  };
+
   return (
     <>
       <PersonStandingIcon size={50} />
@@ -21,7 +52,54 @@ export default function LoginPage() {
           <CardTitle>Login</CardTitle>
           <CardDescription>Login to your SupportMe account</CardDescription>
         </CardHeader>
-        <CardContent>Login Form</CardContent>
+        <CardContent>
+          <Form {...form}>
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={form.handleSubmit(handleSubmit)}
+            >
+              {/* email field */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="ganesh@gmail.com" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is the email address you signed up to Fictional
+                      Visual Dashboard with
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* password field */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit">Login</Button>
+            </form>
+          </Form>
+        </CardContent>
         <CardFooter className="justify-between">
           <small>Don&apos;t have an account?</small>
           <Button asChild variant="outline" size="sm">
