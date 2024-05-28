@@ -18,6 +18,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PersonStandingIcon } from "lucide-react";
 import Link from "next/link";
@@ -26,6 +33,9 @@ import * as z from "zod";
 
 const formSchema = z.object({
   email: z.string().email(),
+  accountType: z.enum(["personal", "company"]),
+  companyName: z.string().optional(),
+  numberOfEmployees: z.coerce.number().optional(),
 });
 
 export default function SignupPage() {
@@ -72,7 +82,30 @@ export default function SignupPage() {
                 )}
               />
 
-              {/* password field */}
+              {/* account type select field */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Account type</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an account type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="personal">Personal</SelectItem>
+                      </SelectContent>
+                      <SelectContent>
+                        <SelectItem value="company">Company</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <Button type="submit">Sign up</Button>
             </form>
