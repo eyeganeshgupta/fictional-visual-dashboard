@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, useDayPicker, useNavigation } from "react-day-picker";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -53,12 +53,18 @@ function Calendar({
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
+        caption_dropdowns: "flex gap-1",
         ...classNames,
       }}
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
         Dropdown: (dropdownProps) => {
+          const { currentMonth } = useNavigation();
+
+          const { fromYear, fromMonth, fromDate, toYear, toMonth, toDate } =
+            useDayPicker();
+
           let selectValues: {
             value: string;
             label: string;
@@ -71,13 +77,31 @@ function Calendar({
                 label: format(new Date(new Date().getFullYear(), i, 1), "MMM"),
               };
             });
+          } else if (dropdownProps.name === "years") {
+            const earliestYear =
+              fromYear || fromMonth?.getFullYear() || fromDate?.getFullYear();
+            const latestYear =
+              toYear || toMonth?.getFullYear() || toDate?.getFullYear();
+
+            if (earliestYear && latestYear) {
+              const yearsLength = latestYear - earliestYear + 1;
+              selectValues = Array.from({ length: yearsLength }, (_, idx) => {
+                return {
+                  value: (earliestYear + idx).toString(),
+                  label: (earliestYear + idx).toString(),
+                };
+              });
+            }
           }
 
-          console.log(selectValues);
+          const caption = format(
+            currentMonth,
+            dropdownProps.name === "months" ? "MMM" : "yyyy"
+          );
 
           return (
             <Select>
-              <SelectTrigger>dropdown</SelectTrigger>
+              <SelectTrigger>{caption}</SelectTrigger>
               <SelectContent>
                 {selectValues.map((selectValue) => (
                   <SelectItem key={selectValue.value} value={selectValue.value}>
