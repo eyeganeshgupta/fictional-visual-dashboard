@@ -53,6 +53,14 @@ const formSchema = z
       );
       return date <= eighteenYearsAgo;
     }, "You must be at least 18 years old."),
+    password: z
+      .string()
+      .min(8, "The password must be a minimum of 8 characters long.")
+      .refine((password) => {
+        // * must contain at least 1 special case character and 1 uppercase letter
+        return /^(?=.*[!@#$%^&*])(?=.*[A-Z]).*$/.test(password);
+      }, "Your password needs to have at least one special character and one uppercase letter."),
+    passwordConfirm: z.string(),
   })
   .superRefine((data, context) => {
     if (data.accountType === "company" && !data.companyName) {
@@ -71,6 +79,14 @@ const formSchema = z
         code: z.ZodIssueCode.custom,
         path: ["numberOfEmployees"],
         message: "Number of employees is required",
+      });
+    }
+
+    if (data.password !== data.passwordConfirm) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["passwordConfirm"],
+        message: "The passwords you entered do not match each other.",
       });
     }
   });
@@ -225,6 +241,44 @@ export default function SignupPage() {
                         />
                       </PopoverContent>
                     </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* password field */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* confirm password field */}
+              <FormField
+                control={form.control}
+                name="passwordConfirm"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        {...field}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
