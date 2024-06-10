@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,13 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import avatar from "@/public/images/avatar.jpg";
 import {
   AlertTriangleIcon,
   BadgeCheckIcon,
+  PartyPopperIcon,
   UserCheck2Icon,
   UserIcon,
   UserRoundXIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function EmployeesStats() {
@@ -68,10 +72,21 @@ export default function EmployeesStats() {
         </CardFooter>
       </Card>
 
-      <Card className="border-pink-500">
+      <Card className="border-pink-500 flex flex-col">
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Employee of the month</CardTitle>
         </CardHeader>
+        <CardContent className="flex gap-2 items-center">
+          <Avatar>
+            <Image src={avatar} alt="employee-of-the-month" />
+            <AvatarFallback>GG</AvatarFallback>
+          </Avatar>
+          <span className="text-2xl">Ganesh Gupta!</span>
+        </CardContent>
+        <CardFooter className="flex gap-2 items-center text-xs text-muted-foreground mt-auto">
+          <PartyPopperIcon className="text-pink-500" />
+          <span>Congratulations, Ganesh!</span>
+        </CardFooter>
       </Card>
     </div>
   );
