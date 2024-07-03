@@ -19,6 +19,7 @@ import avatarD from "@/public/images/avatar-david.jpg";
 import avatarH from "@/public/images/avatar-hrithik.jpg";
 import avatarK from "@/public/images/avatar-kristen.jpg";
 import Image from "next/image";
+import SupportTicketsResolved from "./support-tickets-resolved";
 import TeamDistributionChart from "./team-distribution-chart";
 
 const teamLeaders = [
@@ -125,7 +126,7 @@ export default function TeamsStats() {
         </Card>
 
         <Card>
-          <CardHeader className="pb-2">
+          <CardHeader className="pb-0">
             <CardTitle className="text-base flex justify-between items-center">
               <span>Team Distribution</span>
               <PieChartIcon />
@@ -144,7 +145,9 @@ export default function TeamsStats() {
             <span>Support tickets resolved</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pl-0">{/* Line Graph */}</CardContent>
+        <CardContent className="pl-0">
+          <SupportTicketsResolved />
+        </CardContent>
       </Card>
     </>
   );

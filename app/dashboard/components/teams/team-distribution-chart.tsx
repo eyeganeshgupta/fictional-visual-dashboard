@@ -4,17 +4,17 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 const data = [
   {
-    name: "Delta",
+    name: "Alpha (Α, α)",
     value: 55,
     color: "#84cc16",
   },
   {
-    name: "Alpha",
+    name: "Beta (Β, β)",
     value: 34,
     color: "#3b82f6",
   },
   {
-    name: "Canary",
+    name: "Gamma (Γ, γ)",
     value: 11,
     color: "#f97316",
   },
